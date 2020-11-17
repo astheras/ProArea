@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
     return {
       // When navigating to the "/" route, build the FirstScreen widget.
       '/': (context) => SplashPage(),
-      '/postlist': (context) => PostListPage(),
+      '/postlist': (context) => PostList(),
       //  '/list': (context) => MyHomePage(page: "list"),
       //  '/detail': (context) => MyHomePage(page: "detail"),
     };

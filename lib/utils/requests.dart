@@ -11,7 +11,7 @@ Future fetchGetAsync(url) async {
   final response = await http.get(url);
 
   if (response.statusCode == 200) {
-    return Album.fromJson(jsonDecode(response.body));
+    return response.body;
   } else {
     throw Exception('Failed to load album');
   }
