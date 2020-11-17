@@ -14,6 +14,8 @@ class _SplashPage extends State<SplashPage> {
         .then((response) {
       postListStore.postList = response;
       Navigator.pushNamed(context, '/main');
+    }).catchError((error) {
+      print(error);
     });
     super.initState();
   }

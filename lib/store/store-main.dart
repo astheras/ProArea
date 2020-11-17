@@ -9,6 +9,10 @@ class _ListStore {
   set postList(list) {
     _posts.add(list);
   }
+
+  get postList {
+    return _posts.value;
+  }
 }
 
 _ListStore postListStore = _ListStore();
