@@ -14,7 +14,7 @@ class _SplashPage extends State<SplashPage> {
   void initState() {
     fetchGetAsync('https://jsonplaceholder.typicode.com/posts')
         .then((response) {
-      postListStore.postList = jsonDecode(response);
+      store.postList = jsonDecode(response);
       Navigator.pushNamed(context, '/postlist');
     }).catchError((error) {
       print(error);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'pages/post-detail.dart';
 import 'pages/post-list.dart';
 import 'pages/splash-page.dart';
 
@@ -28,8 +29,7 @@ class MyApp extends StatelessWidget {
       // When navigating to the "/" route, build the FirstScreen widget.
       '/': (context) => SplashPage(),
       '/postlist': (context) => PostList(),
-      //  '/list': (context) => MyHomePage(page: "list"),
-      //  '/detail': (context) => MyHomePage(page: "detail"),
+      '/detail': (context) => PostDetail(),
     };
   }
 }
