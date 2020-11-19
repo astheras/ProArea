@@ -1,3 +1,7 @@
+import 'package:flutter/material.dart';
+import 'package:mainx/pages/post-detail.dart';
+import 'package:mainx/pages/post-list.dart';
+import 'package:mainx/pages/splash-page.dart';
 import 'package:rxdart/rxdart.dart';
 
 class _Store {
@@ -6,6 +10,12 @@ class _Store {
   //Map<List> posts;
 
   //Stream get stream$ => _posts.stream;
+
+  var routes = {
+    '/': (context) => SplashScreenPage(),
+    '/postlist': (context) => PostListPage(),
+    '/detail': (context) => PostDetailPage(),
+  };
 
   // post list
   set postList(list) {

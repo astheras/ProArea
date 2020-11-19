@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:mainx/store/store-main.dart';
 
-class PostList extends StatefulWidget {
+class PostListPage extends StatefulWidget {
   @override
-  _PostListState createState() => _PostListState();
+  _PostListPageState createState() => _PostListPageState();
 }
 
-class _PostListState extends State<PostList> {
+class _PostListPageState extends State<PostListPage> {
+  void initState() {
+    store.routes.remove('/');
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

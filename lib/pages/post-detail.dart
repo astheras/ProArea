@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mainx/utils/requests.dart';
 
-class PostDetail extends StatefulWidget {
+class PostDetailPage extends StatefulWidget {
   @override
-  _PostDetailState createState() => _PostDetailState();
+  _PostDetailPageState createState() => _PostDetailPageState();
 }
 
-class _PostDetailState extends State<PostDetail> {
+class _PostDetailPageState extends State<PostDetailPage> {
   int _currentIndex = 0;
   Map _data;
   @override
@@ -29,36 +29,42 @@ class _PostDetailState extends State<PostDetail> {
         return Scaffold(
           body: Padding(
             padding: EdgeInsets.all(15),
-            child: Card(
-              elevation: 5,
-              clipBehavior: Clip.antiAlias,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    colors: [Colors.blue[200], Colors.red],
-                    stops: [0.0, 0.7],
-                  ),
+            child: Container(
+              child: Card(
+                elevation: 5,
+                clipBehavior: Clip.antiAlias,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    ListTile(
-                      leading: Icon(Icons.portrait),
-                      title: Text(_data["name"]),
-                      subtitle: Text(_data["username"]),
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      colors: [Colors.blue[200], Colors.red],
+                      stops: [0.0, 0.7],
                     ),
-                    Card(
-                      elevation: 5,
-                      child: Padding(
-                        padding: EdgeInsets.all(5),
-                        child: _info(),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      ListTile(
+                        leading: Icon(Icons.portrait),
+                        title: Text(_data["name"]),
+                        subtitle: Text(_data["username"]),
                       ),
-                    ),
-                  ],
+                      Expanded(
+                        child: Container(
+                          child: Card(
+                            elevation: 5,
+                            child: Padding(
+                              padding: EdgeInsets.all(5),
+                              child: _info(),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -97,38 +103,91 @@ class _PostDetailState extends State<PostDetail> {
 
   // render info tab
   _info() {
-    List<Widget> render;
+    List<Widget> children;
     if (_currentIndex == 0) {
-      render = _home();
+      children = _home();
     } else if (_currentIndex == 1) {
-      render = _address();
+      children = _address();
+    } else if (_currentIndex == 2) {
+      children = _company();
     }
-
-    return Padding(
-      padding: EdgeInsets.all(5),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: render,
-      ),
+    return ListView(
+      padding: const EdgeInsets.all(8),
+      children: children,
     );
   }
 
   _home() {
     return [
-      Text("email:  ${_data["email"]}"),
-      Text("phone:  ${_data["phone"]}"),
-      Text("website:  ${_data["website"]}"),
+      ListTile(
+        trailing: Icon(Icons.mail),
+        title: Text('email'),
+        subtitle: Text(_data["email"]),
+      ),
+      ListTile(
+        trailing: Icon(Icons.phone),
+        title: Text('phone'),
+        subtitle: Text(_data["phone"]),
+      ),
+      ListTile(
+        trailing: Icon(Icons.web_asset_sharp),
+        title: Text('website'),
+        subtitle: Text(_data["website"]),
+      ),
+    ];
+  }
+
+  _company() {
+    Map company = _data["company"];
+
+    return [
+      ListTile(
+        trailing: Icon(Icons.title_outlined),
+        title: Text('name'),
+        subtitle: Text(company["name"]),
+      ),
+      ListTile(
+        trailing: Icon(Icons.recommend),
+        title: Text('catchPhrase'),
+        subtitle: Text(company["catchPhrase"]),
+      ),
+      ListTile(
+        trailing: Icon(Icons.attach_money),
+        title: Text('bs'),
+        subtitle: Text(company["bs"]),
+      ),
     ];
   }
 
   _address() {
     Map address = _data["address"];
+
     return [
-      Text("city:  ${address["city"]}"),
-      Text("street:  ${address["street"]}"),
-      Text("suite:  ${address["suite"]}"),
-      Text("zipcode:  ${address["zipcode"]}"),
-      Text("geo:  ${address["geo"]["lat"]}; ${address["geo"]["lng"]}"),
+      ListTile(
+        trailing: Icon(Icons.location_city),
+        title: Text('city'),
+        subtitle: Text(address["city"]),
+      ),
+      ListTile(
+        trailing: Icon(Icons.streetview_outlined),
+        title: Text('street'),
+        subtitle: Text(address["street"]),
+      ),
+      ListTile(
+        trailing: Icon(Icons.apartment),
+        title: Text('suite'),
+        subtitle: Text(address["suite"]),
+      ),
+      ListTile(
+        trailing: Icon(Icons.confirmation_number_outlined),
+        title: Text('zipcode'),
+        subtitle: Text(address["zipcode"]),
+      ),
+      ListTile(
+        trailing: Icon(Icons.gps_fixed),
+        title: Text('geo'),
+        subtitle: Text("${address["geo"]["lat"]}; ${address["geo"]["lng"]}"),
+      ),
     ];
   }
 
