@@ -8,8 +8,6 @@ class PostListPage extends StatefulWidget {
 
 class _PostListPageState extends State<PostListPage> {
   void initState() {
-    store.routes.remove('/');
-
     super.initState();
   }
 

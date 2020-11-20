@@ -21,9 +21,9 @@ class _SplashScreenPage extends State<SplashScreenPage> {
     });
     super.initState();
     Timer(
-      Duration(seconds: 4),
-      () => Navigator.pushNamed(context, '/postlist'),
-    );
+        Duration(seconds: 4),
+        () => Navigator.pushNamedAndRemoveUntil(
+            context, "/postlist", (r) => false));
   }
 
   @override
@@ -51,7 +51,7 @@ class _SplashScreenPage extends State<SplashScreenPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Image.asset(
-                        "assets/images/logo.png",
+                        "assets/images/logo.jpg",
                         fit: BoxFit.cover,
                       ),
                       Padding(

@@ -40,7 +40,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.bottomCenter,
-                      colors: [Colors.blue[200], Colors.red],
+                      colors: [Colors.blueGrey, Colors.red],
                       stops: [0.0, 0.7],
                     ),
                   ),
