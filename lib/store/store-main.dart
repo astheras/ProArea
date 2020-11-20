@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:mainx/pages/post-detail.dart';
 import 'package:mainx/pages/post-list.dart';
 import 'package:mainx/pages/splash-page.dart';
