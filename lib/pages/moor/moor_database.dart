@@ -2,16 +2,45 @@ import 'package:moor_flutter/moor_flutter.dart';
 
 part 'moor_database.g.dart';
 
-class Tasks extends Table {
-  // autoIncrement automatically sets this to be the primary key
-  IntColumn get id => integer().autoIncrement()();
-  TextColumn get tagName =>
-      text().nullable().customConstraint('NULL REFERENCES tags(name)')();
-  TextColumn get name => text().withLength(min: 1, max: 50)();
-  DateTimeColumn get dueDate => dateTime().nullable()();
-  BoolColumn get completed => boolean().withDefault(Constant(false))();
+class PostList extends Table {
+  IntColumn get id => integer()();
+  IntColumn get userId => integer()();
+  TextColumn get title => text().nullable()();
+  TextColumn get body => text().nullable()();
 }
 
+class User extends Table {
+  IntColumn get id => integer()();
+  TextColumn get name => text().nullable()();
+  TextColumn get username => text().nullable()();
+  TextColumn get email => text().nullable()();
+  TextColumn get phone => text().nullable()();
+  TextColumn get website => text().nullable()();
+  IntColumn get addressCityId => integer()();
+  IntColumn get addressStreetId => integer()();
+  TextColumn get addressSuite => text().nullable()();
+  TextColumn get zipcode => text().nullable()();
+  IntColumn get componyId => integer()();
+}
+
+class Street extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get name => text().nullable()();
+}
+
+class City extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get name => text().nullable()();
+}
+
+class Company extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get name => text().nullable()();
+  TextColumn get catchPhrase => text().nullable()();
+  TextColumn get bs => text().nullable()();
+}
+
+/*
 class Tags extends Table {
   TextColumn get name => text().withLength(min: 1, max: 10)();
   IntColumn get color => integer()();
@@ -19,7 +48,8 @@ class Tags extends Table {
   @override
   Set<Column> get primaryKey => {name};
 }
-
+*/
+/*
 class TaskWithTag {
   final Task task;
   final Tag tag;
@@ -100,3 +130,4 @@ class TagDao extends DatabaseAccessor<AppDatabase> with _$TagDaoMixin {
   Stream<List<Tag>> watchTags() => select(tags).watch();
   Future insertTag(Insertable<Tag> tag) => into(tags).insert(tag);
 }
+*/
