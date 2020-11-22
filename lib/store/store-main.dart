@@ -26,7 +26,7 @@ class _Store {
     _posts.add(jsonDecode(value));
   }*/
 
-  Future<List> postList([bool refresh = false]) async {
+  Future<Map> postList([bool refresh = false]) async {
     if (_posts.value == null || refresh)
       return await fetchGet('https://jsonplaceholder.typicode.com/posts');
 

@@ -19,48 +19,101 @@ class _PostListPageState extends State<PostListPage> {
         builder: (context, snap) {
           if (!snap.hasData) {
             return Center(
-              child: CircularProgressIndicator(),
+              child: Column(
+                children: [
+                  CircularProgressIndicator(),
+                  Text("Loading..."),
+                ],
+              ),
             );
           }
-          /*store.postList.removeWhere((item) {
-            return item["id"] == 1;
-          });*/
 
-          var postList = snap.data;
-          return Container(
-            child: RefreshIndicator(
-              child: ListView.builder(
-                padding: EdgeInsets.all(8),
-                itemCount: postList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Card(
-                    elevation: 5,
-                    child: Column(
-                      children: <Widget>[
-                        ListTile(
-                          //trailing: Icon(Icons.supervised_user_circle),
-                          title: Text(postList[index]['title']),
-                          onTap: () {
-                            Map params = {
-                              "userId": postList[index]['userId'],
-                            };
-                            Navigator.pushNamed(
-                              context,
-                              '/detail',
-                              arguments: params,
-                            );
-                          },
-                          subtitle: Text(postList[index]['body']),
-                        )
-                      ],
-                    ),
-                  );
-                },
-              ),
-              onRefresh: _refreshData,
-            ),
-          );
+          if (!snap.data["result"]) {
+            return _renderError(snap.data["message"]);
+          } else {
+            return _renderList(snap.data["data"]);
+          }
         },
+      ),
+    );
+  }
+
+  _renderError(message) {
+    return Stack(
+      fit: StackFit.expand,
+      children: <Widget>[
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.black,
+          ),
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              flex: 2,
+              child: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      message,
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0,
+                      ),
+                    ),
+                    FlatButton(
+                      onPressed: () {
+                        setState(() {
+                          store.postList(true);
+                        });
+                      },
+                      child: Icon(Icons.refresh),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
+  _renderList(postList) {
+    return Container(
+      child: RefreshIndicator(
+        child: ListView.builder(
+          padding: EdgeInsets.all(8),
+          itemCount: postList.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Card(
+              elevation: 5,
+              child: Column(
+                children: <Widget>[
+                  ListTile(
+                    //trailing: Icon(Icons.supervised_user_circle),
+                    title: Text(postList[index]['title']),
+                    onTap: () {
+                      Map params = {
+                        "userId": postList[index]['userId'],
+                      };
+                      Navigator.pushNamed(
+                        context,
+                        '/detail',
+                        arguments: params,
+                      );
+                    },
+                    subtitle: Text(postList[index]['body']),
+                  )
+                ],
+              ),
+            );
+          },
+        ),
+        onRefresh: _refreshData,
       ),
     );
   }

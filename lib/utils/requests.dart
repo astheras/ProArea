@@ -1,10 +1,29 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-Future<dynamic> fetchGet(String url) async {
+Future<Map> fetchGet(String url) async {
   // данные
-  final response = await http.get(url);
-  return json.decode(response.body);
+  var response;
+  try {
+    response = await http.get(url);
+  } catch (error) {
+    String message;
+    if (error.osError.errorCode == 7)
+      message = "check your inet connection";
+    else
+      message = error.message;
+    return {
+      "result": false,
+      "message": message,
+    };
+  }
+
+  Map result = {
+    "result": true,
+    "data": json.decode(response.body),
+  };
+
+  return result;
 }
 
 Future fetchGetAsync(url) async {
