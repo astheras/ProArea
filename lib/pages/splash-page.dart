@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:mainx/store/store-main.dart';
-import 'package:mainx/utils/requests.dart';
 
 class SplashScreenPage extends StatefulWidget {
   @override
@@ -13,17 +11,12 @@ class SplashScreenPage extends StatefulWidget {
 class _SplashScreenPage extends State<SplashScreenPage> {
   @override
   void initState() {
-    fetchGetAsync('https://jsonplaceholder.typicode.com/posts')
-        .then((response) {
-      store.postList = jsonDecode(response);
-    }).catchError((error) {
-      print(error);
-    });
     super.initState();
     Timer(
-        Duration(seconds: 4),
-        () => Navigator.pushNamedAndRemoveUntil(
-            context, "/postlist", (r) => false));
+      Duration(seconds: 4),
+      () =>
+          Navigator.pushNamedAndRemoveUntil(context, "/postlist", (r) => false),
+    );
   }
 
   @override

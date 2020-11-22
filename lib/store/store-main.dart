@@ -1,6 +1,7 @@
 import 'package:mainx/pages/post-detail.dart';
 import 'package:mainx/pages/post-list.dart';
 import 'package:mainx/pages/splash-page.dart';
+import 'package:mainx/utils/requests.dart';
 import 'package:rxdart/rxdart.dart';
 
 class _Store {
@@ -16,12 +17,19 @@ class _Store {
     '/detail': (context) => PostDetailPage(),
   };
 
-  // post list
-  set postList(list) {
-    _posts.add(list);
+  Future<bool> dataLoaded() async {
+    return await _posts.value != null;
   }
 
-  get postList {
+  // post list
+  /*set postList(value) {
+    _posts.add(jsonDecode(value));
+  }*/
+
+  Future<List> postList([bool refresh = false]) async {
+    if (_posts.value == null || refresh)
+      return await fetchGet('https://jsonplaceholder.typicode.com/posts');
+
     return _posts.value;
   }
 
