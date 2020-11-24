@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:mainx/store/store-main.dart';
 
@@ -7,6 +9,7 @@ class PostListPage extends StatefulWidget {
 }
 
 class _PostListPageState extends State<PostListPage> {
+  bool _firstRender = true;
   void initState() {
     super.initState();
   }
@@ -18,16 +21,30 @@ class _PostListPageState extends State<PostListPage> {
         future: store.postList(),
         builder: (context, snap) {
           if (!snap.hasData) {
-            return Center(
-              child: Column(
-                children: [
-                  CircularProgressIndicator(),
-                  Text("Loading..."),
-                ],
-              ),
+            return Column(
+              children: [
+                Spacer(),
+                CircularProgressIndicator(),
+                Center(
+                  child: Text("Loading..."),
+                ),
+                Spacer(),
+              ],
             );
           }
 
+          if (_firstRender && store.hasCachedData) {
+            // aftre first render, try to refresh data
+            print("refreshing list data from web");
+            _firstRender = false;
+            Timer(
+              Duration(seconds: 4),
+              () => setState(() {
+                store.postList(true);
+              }),
+            );
+          }
+          _firstRender = false;
           if (!snap.data["result"]) {
             return _renderError(snap.data["message"]);
           } else {
