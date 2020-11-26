@@ -39,9 +39,13 @@ class _PostListPageState extends State<PostListPage> {
             _firstRender = false;
             Timer(
               Duration(seconds: 4),
-              () => setState(() {
-                store.postList(true);
-              }),
+              () {
+                if (mounted) {
+                  setState(() {
+                    store.postList(true);
+                  });
+                }
+              },
             );
           }
           _firstRender = false;

@@ -1,7 +1,7 @@
-import 'dart:convert';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:mainx/utils/requests.dart';
+import 'package:mainx/store/store-main.dart';
 
 class PostDetailPage extends StatefulWidget {
   @override
@@ -16,88 +16,109 @@ class _PostDetailPageState extends State<PostDetailPage> {
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
 
     return FutureBuilder(
-      future: fetchGetAsync(
+      future: store.userDetail(arguments["userId"], this),
+      /*future: fetchGetAsync(
         'https://jsonplaceholder.typicode.com/users/${arguments["userId"]}',
-      ),
+      ),*/
+      //future: _getUserDetail(),
       builder: (context, snap) {
         if (!snap.hasData) {
-          return Center(
-            child: CircularProgressIndicator(),
+          return _render(null, true);
+        }
+        if (store.firstUserRender && store.hasUserCachedData) {
+          // aftre first render, try to refresh data
+          print("refreshing list data from web");
+          store.firstUserRender = false;
+          Timer(
+            Duration(seconds: 5),
+            () {
+              if (mounted) {
+                setState(() {
+                  print('refreshing user detail from inet...');
+                  store.userDetail(arguments["userId"], this, true);
+                });
+              }
+            },
           );
         }
-        _data = jsonDecode(snap.data);
-        return Scaffold(
-          body: Padding(
-            padding: EdgeInsets.all(15),
+        store.firstUserRender = false;
+
+        _data = snap.data["data"];
+        return _render(_data, false);
+      },
+    );
+  }
+
+  // render detail
+  _render(Map data, bool loading) {
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.all(15),
+        child: Container(
+          child: Card(
+            elevation: 5,
+            clipBehavior: Clip.antiAlias,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
             child: Container(
-              child: Card(
-                elevation: 5,
-                clipBehavior: Clip.antiAlias,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  colors: [Colors.blueGrey, Colors.red],
+                  stops: [0.0, 0.7],
                 ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      colors: [Colors.blueGrey, Colors.red],
-                      stops: [0.0, 0.7],
-                    ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  ListTile(
+                    leading: Icon(Icons.portrait),
+                    title: loading ? SizedBox.shrink() : Text(_data["name"]),
+                    subtitle:
+                        loading ? SizedBox.shrink() : Text(_data["username"]),
+                    trailing: loading
+                        ? CircularProgressIndicator()
+                        : SizedBox.shrink(),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      ListTile(
-                        leading: Icon(Icons.portrait),
-                        title: Text(_data["name"]),
-                        subtitle: Text(_data["username"]),
-                      ),
-                      Expanded(
-                        child: Container(
-                          child: Card(
-                            elevation: 5,
-                            child: Padding(
-                              padding: EdgeInsets.all(5),
-                              child: _info(),
-                            ),
-                          ),
+                  Expanded(
+                    child: Container(
+                      child: Card(
+                        elevation: 5,
+                        child: Padding(
+                          padding: EdgeInsets.all(5),
+                          child: loading ? SizedBox.shrink() : _info(),
                         ),
                       ),
-                    ],
+                    ),
                   ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+      bottomNavigationBar: loading
+          ? null
+          : BottomNavigationBar(
+              // onTap: onTabTapped, // new
+              currentIndex: _currentIndex, // new
+              onTap: onTabTapped,
+              items: [
+                new BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  label: 'Home',
                 ),
-              ),
+                new BottomNavigationBarItem(
+                  icon: Icon(Icons.apartment),
+                  label: 'Address',
+                ),
+                new BottomNavigationBarItem(
+                  icon: Icon(Icons.precision_manufacturing_outlined),
+                  label: 'Company',
+                )
+              ],
             ),
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            // onTap: onTabTapped, // new
-            currentIndex: _currentIndex, // new
-            onTap: onTabTapped,
-            items: [
-              new BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
-              ),
-              new BottomNavigationBarItem(
-                icon: Icon(Icons.apartment),
-                label: 'Address',
-              ),
-              new BottomNavigationBarItem(
-                icon: Icon(Icons.precision_manufacturing_outlined),
-                label: 'Company',
-              )
-            ],
-          ),
-        );
-/*
-        Card(
-          child: Column(
-            Text(
-              data["name"],
-            ),
-          ),
-        );*/
-      },
     );
   }
 
