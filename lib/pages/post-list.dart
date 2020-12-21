@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:mainx/store/store-main.dart';
 
 class PostListPage extends StatefulWidget {
   @override
@@ -17,7 +16,9 @@ class _PostListPageState extends State<PostListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
+      body: SizedBox.shrink(),
+
+      /*FutureBuilder(
         future: store.postList(),
         builder: (context, snap) {
           if (!snap.hasData) {
@@ -56,10 +57,11 @@ class _PostListPageState extends State<PostListPage> {
           }
         },
       ),
+      */
     );
   }
 
-  _renderError(message) {
+  /*_renderError(message) {
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
@@ -101,9 +103,9 @@ class _PostListPageState extends State<PostListPage> {
         )
       ],
     );
-  }
+  }*/
 
-  _renderList(postList) {
+  /*_renderList(postList) {
     return Container(
       child: RefreshIndicator(
         child: ListView.builder(
@@ -137,12 +139,12 @@ class _PostListPageState extends State<PostListPage> {
         onRefresh: _refreshData,
       ),
     );
-  }
+  }*/
 
-  //pull to refresh
+  /*//pull to refresh
   Future<void> _refreshData() async {
     setState(() {
       store.postList(true);
     });
-  }
+  }*/
 }

@@ -12,7 +12,7 @@ class _SplashScreenPage extends State<SplashScreenPage> {
   void initState() {
     super.initState();
     Timer(
-      Duration(seconds: 4),
+      Duration(seconds: 40),
       () =>
           Navigator.pushNamedAndRemoveUntil(context, "/postlist", (r) => false),
     );
@@ -43,7 +43,7 @@ class _SplashScreenPage extends State<SplashScreenPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Image.asset(
-                        "assets/images/logo.jpg",
+                        "assets/images/logo.png",
                         fit: BoxFit.cover,
                       ),
                       Padding(
@@ -58,7 +58,7 @@ class _SplashScreenPage extends State<SplashScreenPage> {
                         ),
                       ),
                       Text(
-                        "Unity and Flutter develop agency",
+                        "We build apps with a great User Experience",
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -79,7 +79,7 @@ class _SplashScreenPage extends State<SplashScreenPage> {
                       padding: EdgeInsets.only(top: 20.0),
                     ),
                     Text(
-                      "http://mainx.dev",
+                      "https://proarea.co/",
                       softWrap: true,
                       textAlign: TextAlign.center,
                       style: TextStyle(

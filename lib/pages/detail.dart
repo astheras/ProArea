@@ -1,7 +1,4 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:mainx/store/store-main.dart';
 
 class PostDetailPage extends StatefulWidget {
   @override
@@ -15,7 +12,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
   Widget build(BuildContext context) {
     final Map arguments = ModalRoute.of(context).settings.arguments as Map;
 
-    return FutureBuilder(
+    return SizedBox.shrink();
+    /*FutureBuilder(
       future: store.userDetail(arguments["userId"], this),
       /*future: fetchGetAsync(
         'https://jsonplaceholder.typicode.com/users/${arguments["userId"]}',
@@ -46,7 +44,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
         _data = snap.data["data"];
         return _render(_data, false);
       },
-    );
+    );*/
   }
 
   // render detail

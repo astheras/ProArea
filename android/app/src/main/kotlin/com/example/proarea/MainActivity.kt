@@ -1,4 +1,4 @@
-package com.example.mainx
+package com.example.proarea
 
 import io.flutter.embedding.android.FlutterActivity
 
