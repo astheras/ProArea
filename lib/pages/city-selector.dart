@@ -1,6 +1,9 @@
+import 'package:ProArea/store/store-main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
+
+import 'weather.dart';
 
 class CitySelector extends StatefulWidget {
   @override
@@ -9,12 +12,12 @@ class CitySelector extends StatefulWidget {
 
 class _CitySelectorState extends State<CitySelector> {
   final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
-  Position _currentPosition;
-  Placemark _currentPlace;
+  TextEditingController controller;
 
   @override
   void initState() {
     super.initState();
+    controller = TextEditingController();
     _getCurrentLocation();
   }
 
@@ -49,32 +52,63 @@ class _CitySelectorState extends State<CitySelector> {
                       Container(
                         child: Column(
                           children: [
-                            new Row(
-                              children: <Widget>[
-                                Flexible(
-                                  child: TextField(
-                                    // focusNode: widget.focus,
-                                    // controller: controller,
-                                    // style: TextStyle(color: AppColors.mainFontColor),
-                                    decoration: InputDecoration(
-                                      labelText: _currentPlace == null
-                                          ? ""
-                                          : _currentPlace.locality,
-/*                                      labelStyle: new TextStyle(color: Colors.mainFontColor),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.mainFontColor),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.mainFontColor),
-                    ),
-                    border: UnderlineInputBorder(
-                      borderSide: BorderSide(color: AppColors.mainFontColor),
-                    ),*/
-                                    ),
+                            TextField(
+                              controller: controller,
+                              decoration:
+                                  InputDecoration(labelText: "Enter Location"),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side: BorderSide(color: Colors.black),
                                   ),
+                                  padding: const EdgeInsets.all(0.0),
+                                  // textColor: AppColors.mainFontColor,
+                                  onPressed: () {
+                                    setState(() {
+                                      _getCurrentLocation();
+                                    });
+                                  },
+                                  child: Icon(Icons.location_on),
+                                ),
+                                RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    side: BorderSide(color: Colors.black),
+                                  ),
+                                  padding: const EdgeInsets.all(0.0),
+                                  onPressed: () async {
+                                    Map response = await getWeatherByCityName(
+                                      controller.text,
+                                    );
+                                    if (!response['result']) {
+                                      _dialogBox(
+                                        'Oooops!',
+                                        response['message'],
+                                        [
+                                          FlatButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Text("Ok"),
+                                          ),
+                                        ],
+                                      );
+                                    } else {
+                                      store.weather = response["data"];
+                                      Navigator.pushNamed(
+                                        context,
+                                        '/generalinfo',
+                                      );
+                                    }
+                                  },
+                                  child: Icon(Icons.search),
                                 ),
                               ],
-                            ),
+                            )
                           ],
                         ),
                       ),
@@ -82,24 +116,6 @@ class _CitySelectorState extends State<CitySelector> {
                   ),
                 ),
               ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      "https://proarea.co/",
-                      softWrap: true,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                        color: Colors.white,
-                      ),
-                    )
-                  ],
-                ),
-              )
             ],
           )
         ],
@@ -107,27 +123,39 @@ class _CitySelectorState extends State<CitySelector> {
     );
   }
 
-  _getCurrentLocation() {
+  // modal dialog box
+  _dialogBox(String title, String message, List<Widget> buttons) {
+    showDialog(
+      context: context,
+      //child: dialogBox(title, message, buttons),
+      builder: (_) => new AlertDialog(
+        title: new Text(title),
+        content: new Text(message),
+        actions: buttons,
+      ),
+    );
+  }
+
+  // getting current geo
+  _getCurrentLocation() async {
     geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-        .then((Position position) {
-      setState(() {
-        _currentPosition = position;
-      });
-      _getAddressFromLatLng();
+        .then((Position position) async {
+      await _getAddressFromLatLng(position);
     }).catchError((e) {
       print(e);
     });
   }
 
-  _getAddressFromLatLng() async {
+  // convert geo into city data
+  _getAddressFromLatLng(Position position) async {
     try {
       List<Placemark> p = await geolocator.placemarkFromCoordinates(
-          _currentPosition.latitude, _currentPosition.longitude);
-      Placemark place = p[0];
+          position.latitude, position.longitude);
+      Placemark geo = p[0];
       setState(() {
-        print(place);
-        _currentPlace = place;
+        store.geo = geo;
+        controller.text = store.geo.locality;
       });
     } catch (e) {
       print(e);

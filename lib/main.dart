@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'pages/city-selector.dart';
+import 'pages/general-info.dart';
 import 'pages/splash-page.dart';
 
 void main() {
@@ -15,8 +16,6 @@ class MyApp extends StatelessWidget {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitDown,
     ]);
-
-    _init();
 
     return MaterialApp(
       title: 'ProArea Demo',
@@ -37,16 +36,12 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  // init main data
-  _init() async {
-    ///await store.postList();
-  }
-
   // create routes list
   _routes() {
     return {
       '/': (context) => SplashScreenPage(),
       '/cityselector': (context) => CitySelector(),
+      '/generalinfo': (context) => GeneraiWeatherInfo(),
       //  '/detail': (context) => PostDetailPage(),
     };
   }

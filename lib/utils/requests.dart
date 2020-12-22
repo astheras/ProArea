@@ -9,7 +9,7 @@ Future<Map> fetchGet(String url) async {
   } catch (error) {
     String message;
     if (error.osError.errorCode == 7)
-      message = "check your inet connection";
+      message = "check your internet connection";
     else
       message = error.message;
     return {
@@ -24,16 +24,6 @@ Future<Map> fetchGet(String url) async {
   };
 
   return result;
-}
-
-Future fetchGetAsync(url) async {
-  final response = await http.get(url);
-
-  if (response.statusCode == 200) {
-    return response.body;
-  } else {
-    throw Exception('Failed to load album');
-  }
 }
 /*
 fetchGetAsync(String url) {
