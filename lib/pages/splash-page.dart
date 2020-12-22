@@ -12,9 +12,9 @@ class _SplashScreenPage extends State<SplashScreenPage> {
   void initState() {
     super.initState();
     Timer(
-      Duration(seconds: 40),
-      () =>
-          Navigator.pushNamedAndRemoveUntil(context, "/postlist", (r) => false),
+      Duration(seconds: 3),
+      () => Navigator.pushNamedAndRemoveUntil(
+          context, "/cityselector", (r) => false),
     );
   }
 
@@ -30,7 +30,15 @@ class _SplashScreenPage extends State<SplashScreenPage> {
         children: <Widget>[
           Container(
             decoration: BoxDecoration(
-              color: Colors.blueGrey,
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                colors: [
+                  Colors.black,
+                  Colors.pinkAccent[400],
+                  Colors.deepPurple,
+                ],
+                stops: [0.0, 0.7, 0.7],
+              ),
             ),
           ),
           Column(
@@ -42,15 +50,23 @@ class _SplashScreenPage extends State<SplashScreenPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Image.asset(
-                        "assets/images/logo.png",
-                        fit: BoxFit.cover,
+                      Row(
+                        children: [
+                          Spacer(),
+                          Container(
+                            width: 100,
+                            child: Image.asset(
+                              "assets/images/logo.png",
+                            ),
+                          ),
+                          Spacer(),
+                        ],
                       ),
                       Padding(
                         padding: EdgeInsets.only(top: 10.0),
                       ),
                       Text(
-                        "Computer Software",
+                        "ProArea Digital Agency",
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -74,10 +90,6 @@ class _SplashScreenPage extends State<SplashScreenPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    CircularProgressIndicator(),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.0),
-                    ),
                     Text(
                       "https://proarea.co/",
                       softWrap: true,

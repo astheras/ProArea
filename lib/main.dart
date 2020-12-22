@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'pages/city.dart';
+import 'pages/city-selector.dart';
 import 'pages/splash-page.dart';
 
 void main() {
@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
   _routes() {
     return {
       '/': (context) => SplashScreenPage(),
-      '/postlist': (context) => CitySelector(),
+      '/cityselector': (context) => CitySelector(),
       //  '/detail': (context) => PostDetailPage(),
     };
   }
