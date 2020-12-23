@@ -42,13 +42,11 @@ class _GeneraiWeatherInfoState extends State<GeneraiWeatherInfo> {
             children: <Widget>[
               _cityInfo(),
               _mainInfo(),
-              // Spacer(),
               Text(
                 _bottomHeader(),
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Flexible(
-                flex: 1,
                 child: Container(
                   child: Card(
                     child: GestureDetector(
@@ -82,7 +80,7 @@ class _GeneraiWeatherInfoState extends State<GeneraiWeatherInfo> {
   }
 
   _bottomHeader() {
-    return mode == 0 ? "Interesing Info" : "Hours Forecast";
+    return mode == 0 ? "Interesting Info" : "Hours Forecast";
   }
 
   _renderBottomCard() {
@@ -122,55 +120,72 @@ class _GeneraiWeatherInfoState extends State<GeneraiWeatherInfo> {
           current["condition"]["text"].toString(),
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        Padding(
-          padding: EdgeInsets.all(5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                children: [
-                  Text("Feels Like  ${current["feelslike_c"].toString()}  C"),
-                  Text("Feels Like  ${current["feelslike_f"].toString()}  F"),
-                ],
-              ),
-              Column(
-                children: [
-                  Text("Wind ${current["wind_kph"].toString()}  kph"),
-                  Text("Wind Degree  ${current["wind_degree"].toString()} °"),
-                ],
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                children: [
-                  Text("Feels Like  ${current["feelslike_c"].toString()}  C"),
-                  Text("Feels Like  ${current["feelslike_f"].toString()}  F"),
-                ],
-              ),
-              Column(
-                children: [
-                  Text("Barometer ${current["pressure_mb"].toString()}  mb"),
-                  Text("Humidity  ${current["humidity"].toString()}  %"),
-                ],
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Cloud ${current["cloud"].toString()} %"),
-              Text("Visibility ${current["vis_km"].toString()}  km"),
-            ],
-          ),
+        GridView.count(
+          crossAxisCount: 2,
+          childAspectRatio: 2.0,
+          padding: const EdgeInsets.all(8.0),
+          mainAxisSpacing: 4.0,
+          crossAxisSpacing: 4.0,
+          shrinkWrap: true,
+          children: [
+            ListView(
+              shrinkWrap: true,
+              children: [
+                Card(
+                  color: Colors.transparent,
+                  elevation: 5,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Feels Like ${current["feelslike_c"].toString()} C"),
+                      Text("Feels Like ${current["feelslike_f"].toString()} F"),
+                    ],
+                  ),
+                ),
+                Card(
+                  color: Colors.transparent,
+                  elevation: 5,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          "Barometer ${current["pressure_mb"].toString()}  mb"),
+                      Text("Cloud ${current["cloud"].toString()} %"),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            // second part of GridView
+            ListView(
+              shrinkWrap: true,
+              children: [
+                Card(
+                  color: Colors.transparent,
+                  elevation: 5,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Wind ${current["wind_kph"].toString()} kph"),
+                      Text(
+                          "Wind Degree ${current["wind_degree"].toString()} °"),
+                    ],
+                  ),
+                ),
+                Card(
+                  color: Colors.transparent,
+                  elevation: 5,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Humidity ${current["humidity"].toString()} %"),
+                      Text("Visibility ${current["vis_km"].toString()}  km"),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          ],
         ),
       ],
     );

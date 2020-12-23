@@ -51,10 +51,13 @@ class _CitySelectorState extends State<CitySelector> {
                       Container(
                         child: Column(
                           children: [
-                            TextField(
-                              controller: controller,
-                              decoration:
-                                  InputDecoration(labelText: "Enter Location"),
+                            Padding(
+                              padding: EdgeInsets.all(5),
+                              child: TextField(
+                                controller: controller,
+                                decoration: InputDecoration(
+                                    labelText: "Enter Location"),
+                              ),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -83,10 +86,17 @@ class _CitySelectorState extends State<CitySelector> {
                                     Map response = await getWeatherByCityName(
                                       controller.text,
                                     );
-                                    if (!response['result']) {
+                                    if (!response['result'] ||
+                                        response["data"]["error"] != null) {
+                                      String message = response["data"]["error"]
+                                                  ["message"] ==
+                                              null
+                                          ? response['message']
+                                          : response["data"]["error"]
+                                              ["message"];
                                       _dialogBox(
                                         'Oooops!',
-                                        response['message'],
+                                        message,
                                         [
                                           FlatButton(
                                             onPressed: () {
