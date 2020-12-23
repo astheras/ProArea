@@ -25,18 +25,9 @@ Future<Map> fetchGet(String url) async {
 
   return result;
 }
-/*
-fetchGetAsync(String url) {
-  http.get(url).then((response) {
-    print(response);
-    //_status = response.statusCode;
-    //_body = response.body;
 
-    // setState(() {});//перестраиваем виджет окна для отображения изменений _status и _body
-  }).catchError((error) {
-    // _status = 0;
-    //_body = error.toString();
-
-    //setState(() {});//перестраиваем виджет окна в случае сетевой ошибки
-  });
-}*/
+Future<Map> getWeatherByCityName(String cityName) async {
+  return await fetchGet(
+    'http://api.weatherapi.com/v1/forecast.json?key=701c9041891b4773ab6105328202212&q=$cityName&days=1',
+  );
+}

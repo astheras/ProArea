@@ -1,9 +1,8 @@
 import 'package:ProArea/store/store-main.dart';
+import 'package:ProArea/utils/requests.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
-
-import 'weather.dart';
 
 class CitySelector extends StatefulWidget {
   @override

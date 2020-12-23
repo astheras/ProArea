@@ -1,25 +1,29 @@
+import 'dart:ui';
+
 import 'package:ProArea/store/store-main.dart';
 import 'package:flutter/material.dart';
 
-class GeneraiWeatherInfo extends StatelessWidget {
+import 'hourly-forecast.dart';
+import 'interesting-info.dart';
+
+class GeneraiWeatherInfo extends StatefulWidget {
+  @override
+  _GeneraiWeatherInfoState createState() => _GeneraiWeatherInfoState();
+}
+
+class _GeneraiWeatherInfoState extends State<GeneraiWeatherInfo> {
+  int _sensitivity = 10;
+
   String _bgImage = "assets/images/" +
       (store.weather["current"]["is_day"] == 1 ? "day.jpg" : "night.jpg");
 
+  int mode = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         //fit: StackFit.expand,
         children: <Widget>[
-          /*new Container(
-            decoration: new BoxDecoration(
-              image: new DecorationImage(
-                image: new AssetImage(_bgImage),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          */
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -38,24 +42,35 @@ class GeneraiWeatherInfo extends StatelessWidget {
             children: <Widget>[
               _cityInfo(),
               _mainInfo(),
-              Expanded(
-                flex: 2,
+              // Spacer(),
+              Text(
+                _bottomHeader(),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              Flexible(
+                flex: 1,
                 child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        child: Column(
-                          children: [
-                            TextField(
-                              controller: store.weather[""],
-                              decoration:
-                                  InputDecoration(labelText: "Enter Location"),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                  child: Card(
+                    child: GestureDetector(
+                      child: _renderBottomCard(),
+                      onHorizontalDragUpdate: (details) {
+                        if (details.delta.dx > _sensitivity) {
+                          // Right Swipe
+                          if (mode == 1) {
+                            setState(() {
+                              mode = 0;
+                            });
+                          }
+                        } else if (details.delta.dx < -_sensitivity) {
+                          //Left Swipe
+                          if (mode == 0) {
+                            setState(() {
+                              mode = 1;
+                            });
+                          }
+                        }
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -64,6 +79,19 @@ class GeneraiWeatherInfo extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  _bottomHeader() {
+    return mode == 0 ? "Interesing Info" : "Hours Forecast";
+  }
+
+  _renderBottomCard() {
+    if (mode == 0)
+      return InterestingInfo();
+    else if (mode == 1)
+      return HourlyForecast();
+    else
+      SizedBox.shrink();
   }
 
   Color _fontColor() {
@@ -90,7 +118,10 @@ class GeneraiWeatherInfo extends StatelessWidget {
             )
           ],
         ),
-        Text(current["condition"]["text"].toString()),
+        Text(
+          current["condition"]["text"].toString(),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
         Padding(
           padding: EdgeInsets.all(5),
           child: Row(

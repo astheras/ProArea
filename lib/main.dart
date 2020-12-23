@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'pages/city-selector.dart';
-import 'pages/general-info.dart';
+import 'pages/info/main.dart';
 import 'pages/splash-page.dart';
 
 void main() {
