@@ -1,41 +1,49 @@
 import 'package:ProArea/store/store-main.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class HourlyForecast extends StatelessWidget {
+class DailyForecast extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    List<dynamic> hour = store.weather["forecast"]["forecastday"][0]["hour"];
+    List<dynamic> day = store.weather["forecast"]["forecastday"];
     return GridView.count(
       crossAxisCount: 2,
       children: List.generate(
-        24,
+        day.length,
         (index) {
+          final f = new DateFormat('hh');
+          int curHour = int.parse(f.format(new DateTime.now()));
+          var hour = day[index]["hour"][curHour];
+
+          //print(formatter.format(now));
+          //return SizedBox.shrink();
           return Card(
             elevation: 5,
             child: Column(
               children: [
+                Text(
+                  hour["time"]
+                      .toString()
+                      .substring(0, hour["time"].toString().indexOf(' ')),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      hour[index]["time"]
-                          .substring(hour[index]["time"].indexOf(' ') + 1),
-                    ),
                     Image.network(
-                      hour[index]["condition"]["icon"]
-                          .replaceAll("//", "http://"),
+                      hour["condition"]["icon"].replaceAll("//", "http://"),
                     ),
                     Column(
                       children: [
-                        Text(hour[index]["temp_c"].toString() + " C"),
-                        Text(hour[index]["temp_f"].toString() + " F"),
+                        Text(hour["temp_c"].toString() + " C"),
+                        Text(hour["temp_f"].toString() + " F"),
                       ],
                     )
                   ],
                 ),
                 Text(
-                  hour[index]["condition"]["text"].toString(),
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  hour["condition"]["text"].toString(),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 Card(
                   elevation: 8,
@@ -46,7 +54,7 @@ class HourlyForecast extends StatelessWidget {
                         children: [
                           Text("Wind"),
                           Text(
-                            hour[index]["wind_kph"].toString() + " kph",
+                            hour["wind_kph"].toString() + " kph",
                             style: TextStyle(
                               color: Colors.blue[200],
                               fontSize: 14,
@@ -60,7 +68,7 @@ class HourlyForecast extends StatelessWidget {
                         children: [
                           Text("Feels Like "),
                           Text(
-                            hour[index]["feelslike_c"].toString() + " C",
+                            hour["feelslike_c"].toString() + " C",
                             style: TextStyle(
                               color: Colors.blue[200],
                               fontSize: 14,
@@ -74,7 +82,7 @@ class HourlyForecast extends StatelessWidget {
                         children: [
                           Text("Chance Of Rain"),
                           Text(
-                            hour[index]["chance_of_rain"].toString() + " %",
+                            hour["chance_of_rain"].toString() + " %",
                             style: TextStyle(
                               color: Colors.blue[200],
                               fontSize: 14,
@@ -88,7 +96,7 @@ class HourlyForecast extends StatelessWidget {
                         children: [
                           Text("Chance Of Snow "),
                           Text(
-                            hour[index]["chance_of_snow"].toString() + " %",
+                            hour["chance_of_snow"].toString() + " %",
                             style: TextStyle(
                               color: Colors.blue[200],
                               fontSize: 14,
@@ -99,16 +107,10 @@ class HourlyForecast extends StatelessWidget {
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           );
-          /*Center(
-          child: Text(
-            'Item $index',
-            style: Theme.of(context).textTheme.headline5,
-          ),
-          */
         },
       ),
     );

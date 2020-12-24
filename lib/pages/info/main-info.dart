@@ -3,8 +3,10 @@ import 'dart:ui';
 import 'package:ProArea/store/store-main.dart';
 import 'package:flutter/material.dart';
 
+import 'daily-forecast.dart';
 import 'hourly-forecast.dart';
 import 'interesting-info.dart';
+import 'package:ProArea/components/dot.dart';
 
 class GeneraiWeatherInfo extends StatefulWidget {
   @override
@@ -14,7 +16,7 @@ class GeneraiWeatherInfo extends StatefulWidget {
 class _GeneraiWeatherInfoState extends State<GeneraiWeatherInfo> {
   int _sensitivity = 10;
   final pageViewController = PageController(
-    initialPage: 1,
+    initialPage: 0,
   );
 
   String _bgImage = "assets/images/" +
@@ -45,6 +47,7 @@ class _GeneraiWeatherInfoState extends State<GeneraiWeatherInfo> {
             children: <Widget>[
               _cityInfo(),
               _mainInfo(),
+              _indicators(),
               Text(
                 _bottomHeader(),
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -55,6 +58,7 @@ class _GeneraiWeatherInfoState extends State<GeneraiWeatherInfo> {
                   controller: pageViewController,
                   children: [
                     InterestingInfo(),
+                    DailyForecast(),
                     HourlyForecast(),
                   ],
                 ),
@@ -91,6 +95,17 @@ class _GeneraiWeatherInfoState extends State<GeneraiWeatherInfo> {
           )
         ],
       ),
+    );
+  }
+
+  _indicators() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        dot(true),
+        dot(false),
+        dot(false),
+      ],
     );
   }
 

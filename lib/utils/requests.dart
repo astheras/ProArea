@@ -28,6 +28,6 @@ Future<Map> fetchGet(String url) async {
 
 Future<Map> getWeatherByCityName(String cityName) async {
   return await fetchGet(
-    'http://api.weatherapi.com/v1/forecast.json?key=701c9041891b4773ab6105328202212&q=$cityName&days=1',
+    'http://api.weatherapi.com/v1/forecast.json?key=701c9041891b4773ab6105328202212&q=$cityName&days=8',
   );
 }
