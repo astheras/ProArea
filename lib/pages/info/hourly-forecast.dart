@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:ProArea/store/store-main.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class HourlyForecast extends StatelessWidget {
   @override
@@ -13,9 +10,6 @@ class HourlyForecast extends StatelessWidget {
       children: List.generate(
         24,
         (index) {
-          final DateFormat formatter = DateFormat('yyyy-MM-dd');
-          String now = formatter.format(DateTime.now());
-
           //print(formatter.format(now));
           return Card(
             elevation: 5,
@@ -24,7 +18,10 @@ class HourlyForecast extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(hour[index]["time"].replaceAll(now, "")),
+                    Text(
+                      hour[index]["time"]
+                          .substring(hour[index]["time"].indexOf(' ') + 1),
+                    ),
                     Image.network(
                       hour[index]["condition"]["icon"]
                           .replaceAll("//", "http://"),

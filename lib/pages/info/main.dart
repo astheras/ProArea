@@ -13,6 +13,9 @@ class GeneraiWeatherInfo extends StatefulWidget {
 
 class _GeneraiWeatherInfoState extends State<GeneraiWeatherInfo> {
   int _sensitivity = 10;
+  final pageViewController = PageController(
+    initialPage: 1,
+  );
 
   String _bgImage = "assets/images/" +
       (store.weather["current"]["is_day"] == 1 ? "day.jpg" : "night.jpg");
@@ -46,6 +49,18 @@ class _GeneraiWeatherInfoState extends State<GeneraiWeatherInfo> {
                 _bottomHeader(),
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
+              Expanded(
+                flex: 1,
+                child: PageView(
+                  controller: pageViewController,
+                  children: [
+                    InterestingInfo(),
+                    HourlyForecast(),
+                  ],
+                ),
+              ),
+              /*
+              
               Flexible(
                 child: Container(
                   child: Card(
@@ -71,7 +86,7 @@ class _GeneraiWeatherInfoState extends State<GeneraiWeatherInfo> {
                     ),
                   ),
                 ),
-              ),
+              ),*/
             ],
           )
         ],
