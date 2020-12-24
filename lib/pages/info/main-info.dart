@@ -1,12 +1,12 @@
 import 'dart:ui';
 
+import 'package:ProArea/components/dot-group.dart';
 import 'package:ProArea/store/store-main.dart';
 import 'package:flutter/material.dart';
 
 import 'daily-forecast.dart';
 import 'hourly-forecast.dart';
 import 'interesting-info.dart';
-import 'package:ProArea/components/dot.dart';
 
 class GeneraiWeatherInfo extends StatefulWidget {
   @override
@@ -14,7 +14,6 @@ class GeneraiWeatherInfo extends StatefulWidget {
 }
 
 class _GeneraiWeatherInfoState extends State<GeneraiWeatherInfo> {
-  int _sensitivity = 10;
   final pageViewController = PageController(
     initialPage: 0,
   );
@@ -22,7 +21,18 @@ class _GeneraiWeatherInfoState extends State<GeneraiWeatherInfo> {
   String _bgImage = "assets/images/" +
       (store.weather["current"]["is_day"] == 1 ? "day.jpg" : "night.jpg");
 
-  int mode = 0;
+  @override
+  void initState() {
+    super.initState();
+    store.selectedDayIndex = 0;
+    store.selectedPageIndex = 0;
+    pageViewController.addListener(() {
+      setState(() {
+        store.selectedPageIndex = pageViewController.page.toInt();
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,34 +73,6 @@ class _GeneraiWeatherInfoState extends State<GeneraiWeatherInfo> {
                   ],
                 ),
               ),
-              /*
-              
-              Flexible(
-                child: Container(
-                  child: Card(
-                    child: GestureDetector(
-                      child: _renderBottomCard(),
-                      onHorizontalDragUpdate: (details) {
-                        if (details.delta.dx > _sensitivity) {
-                          // Right Swipe
-                          if (mode == 1) {
-                            setState(() {
-                              mode = 0;
-                            });
-                          }
-                        } else if (details.delta.dx < -_sensitivity) {
-                          //Left Swipe
-                          if (mode == 0) {
-                            setState(() {
-                              mode = 1;
-                            });
-                          }
-                        }
-                      },
-                    ),
-                  ),
-                ),
-              ),*/
             ],
           )
         ],
@@ -99,27 +81,24 @@ class _GeneraiWeatherInfoState extends State<GeneraiWeatherInfo> {
   }
 
   _indicators() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        dot(true),
-        dot(false),
-        dot(false),
-      ],
+    return DotGroup(
+      dotCount: 3,
+      activeDotIndex: store.selectedPageIndex,
+      selectedColor: Colors.blue[200],
+      color: Colors.white,
     );
   }
 
-  _bottomHeader() {
-    return mode == 0 ? "Interesting Info" : "Hours Forecast";
-  }
-
-  _renderBottomCard() {
-    if (mode == 0)
-      return InterestingInfo();
-    else if (mode == 1)
-      return HourlyForecast();
-    else
-      SizedBox.shrink();
+  String _bottomHeader() {
+    if (store.selectedPageIndex == 0) {
+      return "Interesting Info";
+    } else if (store.selectedPageIndex == 1) {
+      return "Daily Forecast";
+    } else if (store.selectedPageIndex == 2) {
+      String date = store.weather["forecast"]["forecastday"]
+          [store.selectedDayIndex]["date"];
+      return "Hourly Forecast $date";
+    }
   }
 
   Color _fontColor() {
