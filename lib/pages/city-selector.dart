@@ -1,3 +1,4 @@
+import 'package:ProArea/components/main-button.dart';
 import 'package:ProArea/store/store-main.dart';
 import 'package:ProArea/utils/requests.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,9 @@ class CitySelector extends StatefulWidget {
 class _CitySelectorState extends State<CitySelector> {
   final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
   TextEditingController controller;
+
+  int _loading = -1;
+  String errorMessage;
 
   @override
   void initState() {
@@ -43,11 +47,11 @@ class _CitySelectorState extends State<CitySelector> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Expanded(
-                flex: 2,
                 child: Container(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
+                      _loadingIndicator(),
                       Container(
                         child: Column(
                           children: [
@@ -56,67 +60,34 @@ class _CitySelectorState extends State<CitySelector> {
                               child: TextField(
                                 controller: controller,
                                 decoration: InputDecoration(
-                                    labelText: "Enter Location"),
+                                  labelText: "Enter Location",
+                                ),
                               ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                RaisedButton(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    side: BorderSide(color: Colors.black),
+                            Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  MainButton(
+                                    icon: Icon(Icons.location_on),
+                                    onTap: () {
+                                      setState(() {
+                                        _getCurrentLocation();
+                                      });
+                                    },
                                   ),
-                                  padding: const EdgeInsets.all(0.0),
-                                  // textColor: AppColors.mainFontColor,
-                                  onPressed: () {
-                                    setState(() {
-                                      _getCurrentLocation();
-                                    });
-                                  },
-                                  child: Icon(Icons.location_on),
-                                ),
-                                RaisedButton(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                    side: BorderSide(color: Colors.black),
+                                  SizedBox(width: 15.0),
+                                  MainButton(
+                                    icon: Icon(Icons.search),
+                                    onTap: () {
+                                      setState(() {
+                                        _getLocationData();
+                                      });
+                                    },
                                   ),
-                                  padding: const EdgeInsets.all(0.0),
-                                  onPressed: () async {
-                                    Map response = await getWeatherByCityName(
-                                      controller.text,
-                                    );
-                                    if (!response['result'] ||
-                                        response["data"]["error"] != null) {
-                                      String message = response["data"]["error"]
-                                                  ["message"] ==
-                                              null
-                                          ? response['message']
-                                          : response["data"]["error"]
-                                              ["message"];
-                                      _dialogBox(
-                                        'Oooops!',
-                                        message,
-                                        [
-                                          FlatButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text("Ok"),
-                                          ),
-                                        ],
-                                      );
-                                    } else {
-                                      store.weather = response["data"];
-                                      Navigator.pushNamed(
-                                        context,
-                                        '/generalinfo',
-                                      );
-                                    }
-                                  },
-                                  child: Icon(Icons.search),
-                                ),
-                              ],
+                                ],
+                              ),
                             )
                           ],
                         ),
@@ -130,6 +101,47 @@ class _CitySelectorState extends State<CitySelector> {
         ],
       ),
     );
+  }
+
+  _loadingIndicator() {
+    if (_loading == -1) {
+      return SizedBox.shrink();
+    } else if (_loading == 0) {
+      return Text('Detecting your location...');
+    } else if (_loading == 1) {
+      return Text(errorMessage);
+    } else if (_loading == 2) {
+      return Text('Loading...');
+    }
+  }
+
+  _getLocationData() async {
+    Map response = await getWeatherByCityName(
+      controller.text,
+    );
+    if (!response['result'] || response["data"]["error"] != null) {
+      String message = response["data"]["error"]["message"] == null
+          ? response['message']
+          : response["data"]["error"]["message"];
+      _dialogBox(
+        'Oooops!',
+        message,
+        [
+          FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("Ok"),
+          ),
+        ],
+      );
+    } else {
+      store.weather = response["data"];
+      Navigator.pushNamed(
+        context,
+        '/generalinfo',
+      );
+    }
   }
 
   // modal dialog box
@@ -147,12 +159,16 @@ class _CitySelectorState extends State<CitySelector> {
 
   // getting current geo
   _getCurrentLocation() async {
+    _loading = 0;
     geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) async {
       await _getAddressFromLatLng(position);
     }).catchError((e) {
-      print(e);
+      setState(() {
+        _loading = 1;
+        errorMessage = e.toString();
+      });
     });
   }
 
@@ -165,9 +181,13 @@ class _CitySelectorState extends State<CitySelector> {
       setState(() {
         store.geo = geo;
         controller.text = store.geo.locality;
+        _loading = -1;
       });
     } catch (e) {
-      print(e);
+      setState(() {
+        _loading = 1;
+        errorMessage = e.toString();
+      });
     }
   }
 }

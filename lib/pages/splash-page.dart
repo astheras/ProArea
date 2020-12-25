@@ -74,19 +74,19 @@ class _SplashScreenPage extends State<SplashScreenPage> {
                         ),
                       ),
                       Text(
+                        "Weather app",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                      Text(
                         "Test Task By Samykov Andrew",
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 18.0,
-                        ),
-                      ),
-                      Text(
-                        "Weather",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14.0,
+                          fontSize: 12.0,
                         ),
                       ),
                     ],

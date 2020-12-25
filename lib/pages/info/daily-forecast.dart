@@ -34,78 +34,73 @@ class DailyForecast extends StatelessWidget {
             },
             child: Card(
               elevation: 5,
-              child: Stack(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        colors: [
-                          Colors.black,
-                          Colors.grey,
-                        ],
-                        stops: [0.1, 0.8],
-                      ),
-                    ),
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    colors: [
+                      Colors.black,
+                      Colors.grey,
+                    ],
+                    stops: [0.1, 0.8],
                   ),
-                  Column(
-                    children: [
-                      Text(
-                        hour["time"]
-                            .toString()
-                            .substring(0, hour["time"].toString().indexOf(' ')),
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.network(
-                            hour["condition"]["icon"]
-                                .replaceAll("//", "http://"),
-                          ),
-                          Column(
-                            children: [
-                              Text(hour["temp_c"].toString() + " C"),
-                              Text(hour["temp_f"].toString() + " F"),
-                            ],
-                          )
-                        ],
-                      ),
-                      Text(
-                        hour["condition"]["text"].toString(),
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                      Card(
-                        elevation: 8,
-                        child: Container(
-                          color: Colors.black.withOpacity(0.4),
-                          child: Column(
-                            children: [
-                              _detailText(
-                                "Wind",
-                                hour["wind_kph"].toString() + " kph",
-                              ),
-                              _detailText(
-                                "Feels Like",
-                                hour["feelslike_c"].toString() + " C",
-                              ),
-                              _detailText(
-                                "Chance Of Rain",
-                                hour["chance_of_rain"].toString() + " %",
-                              ),
-                              _detailText(
-                                "Chance Of Snow",
-                                hour["chance_of_snow"].toString() + " %",
-                              ),
-                            ],
-                          ),
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      hour["time"]
+                          .toString()
+                          .substring(0, hour["time"].toString().indexOf(' ')),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.network(
+                          hour["condition"]["icon"].replaceAll("//", "http://"),
+                        ),
+                        Column(
+                          children: [
+                            Text(hour["temp_c"].toString() + " C"),
+                            Text(hour["temp_f"].toString() + " F"),
+                          ],
+                        )
+                      ],
+                    ),
+                    Text(
+                      hour["condition"]["text"].toString(),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    Card(
+                      elevation: 8,
+                      child: Container(
+                        color: Colors.black.withOpacity(0.4),
+                        child: Column(
+                          children: [
+                            _detailText(
+                              "Wind",
+                              hour["wind_kph"].toString() + " kph",
+                            ),
+                            _detailText(
+                              "Feels Like",
+                              hour["feelslike_c"].toString() + " C",
+                            ),
+                            _detailText(
+                              "Chance Of Rain",
+                              hour["chance_of_rain"].toString() + " %",
+                            ),
+                            _detailText(
+                              "Chance Of Snow",
+                              hour["chance_of_snow"].toString() + " %",
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
             ),
           );
