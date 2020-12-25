@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -6,6 +7,11 @@ class _Store {
   BehaviorSubject _weather = BehaviorSubject.seeded(null);
   BehaviorSubject _selectedDayIndex = BehaviorSubject.seeded(null);
   BehaviorSubject _selectedPageIndex = BehaviorSubject.seeded(null);
+
+  //sorry, but i dod't now how to make pageview change active page without srore(((
+  final pageViewController = PageController(
+    initialPage: 0,
+  );
 
   get geo {
     return _geo.value;

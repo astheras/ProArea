@@ -14,10 +14,6 @@ class GeneraiWeatherInfo extends StatefulWidget {
 }
 
 class _GeneraiWeatherInfoState extends State<GeneraiWeatherInfo> {
-  final pageViewController = PageController(
-    initialPage: 0,
-  );
-
   String _bgImage = "assets/images/" +
       (store.weather["current"]["is_day"] == 1 ? "day.jpg" : "night.jpg");
 
@@ -26,9 +22,9 @@ class _GeneraiWeatherInfoState extends State<GeneraiWeatherInfo> {
     super.initState();
     store.selectedDayIndex = 0;
     store.selectedPageIndex = 0;
-    pageViewController.addListener(() {
+    store.pageViewController.addListener(() {
       setState(() {
-        store.selectedPageIndex = pageViewController.page.toInt();
+        store.selectedPageIndex = store.pageViewController.page.toInt();
       });
     });
   }
@@ -65,7 +61,7 @@ class _GeneraiWeatherInfoState extends State<GeneraiWeatherInfo> {
               Expanded(
                 flex: 1,
                 child: PageView(
-                  controller: pageViewController,
+                  controller: store.pageViewController,
                   children: [
                     InterestingInfo(),
                     DailyForecast(),
@@ -94,7 +90,7 @@ class _GeneraiWeatherInfoState extends State<GeneraiWeatherInfo> {
       return "Interesting Info";
     } else if (store.selectedPageIndex == 1) {
       return "Daily Forecast";
-    } else if (store.selectedPageIndex == 2) {
+    } else {
       String date = store.weather["forecast"]["forecastday"]
           [store.selectedDayIndex]["date"];
       return "Hourly Forecast $date";

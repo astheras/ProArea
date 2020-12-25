@@ -1,13 +1,19 @@
 import 'package:ProArea/store/store-main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class HourlyForecast extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<dynamic> hour = store.weather["forecast"]["forecastday"]
         [store.selectedDayIndex]["hour"];
-    return GridView.count(
-      crossAxisCount: 2,
+    return StaggeredGridView.count(
+      crossAxisCount: 4,
+      padding: const EdgeInsets.all(2.0),
+      staggeredTiles:
+          hour.map<StaggeredTile>((_) => StaggeredTile.fit(2)).toList(),
+      mainAxisSpacing: 3.0,
+      crossAxisSpacing: 4.0, // add some space
       children: List.generate(
         24,
         (index) {
@@ -55,61 +61,21 @@ class HourlyForecast extends StatelessWidget {
                       color: Colors.black.withOpacity(0.4),
                       child: Column(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Wind"),
-                              Text(
-                                hour[index]["wind_kph"].toString() + " kph",
-                                style: TextStyle(
-                                  color: Colors.blue[200],
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
+                          _detailText(
+                            "Wind",
+                            hour[index]["wind_kph"].toString() + " kph",
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Feels Like "),
-                              Text(
-                                hour[index]["feelslike_c"].toString() + " C",
-                                style: TextStyle(
-                                  color: Colors.blue[200],
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
+                          _detailText(
+                            "Feels Like",
+                            hour[index]["feelslike_c"].toString() + " C",
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Chance Of Rain"),
-                              Text(
-                                hour[index]["chance_of_rain"].toString() + " %",
-                                style: TextStyle(
-                                  color: Colors.blue[200],
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
+                          _detailText(
+                            "Chance Of Rain",
+                            hour[index]["chance_of_rain"].toString() + " %",
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Chance Of Snow "),
-                              Text(
-                                hour[index]["chance_of_snow"].toString() + " %",
-                                style: TextStyle(
-                                  color: Colors.blue[200],
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
+                          _detailText(
+                            "Chance Of Snow",
+                            hour[index]["chance_of_snow"].toString() + " %",
                           ),
                         ],
                       ),
@@ -119,44 +85,25 @@ class HourlyForecast extends StatelessWidget {
               ),
             ),
           );
-          /*Center(
-          child: Text(
-            'Item $index',
-            style: Theme.of(context).textTheme.headline5,
-          ),
-          */
         },
       ),
     );
-    /*return Container(
-      child: ListView.builder(
-        primary: false,
-        shrinkWrap: true,
-        padding: EdgeInsets.all(8),
-        itemCount: hour.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Card(
-            elevation: 5,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Row(
-                  children: [
-                    Text(index.toString()),
-                    Image.network(
-                      hour[index]["condition"]["icon"]
-                          .replaceAll("//", "http://"),
-                    ),
-                    Text(hour[index]["condition"]["text"].toString()),
-                  ],
-                ),
-                Text("temp_c"),
-                Text(hour[index]["temp_c"].toString() + " C"),
-              ],
-            ),
-          );
-        },
-      ),
-    );*/
+  }
+
+  _detailText(String label, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label),
+        Text(
+          value,
+          style: TextStyle(
+            color: Colors.blue[200],
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
   }
 }

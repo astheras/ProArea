@@ -1,13 +1,20 @@
 import 'package:ProArea/store/store-main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
 
 class DailyForecast extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<dynamic> day = store.weather["forecast"]["forecastday"];
-    return GridView.count(
-      crossAxisCount: 2,
+
+    return StaggeredGridView.count(
+      crossAxisCount: 4,
+      padding: const EdgeInsets.all(2.0),
+      staggeredTiles:
+          day.map<StaggeredTile>((_) => StaggeredTile.fit(2)).toList(),
+      mainAxisSpacing: 3.0,
+      crossAxisSpacing: 4.0, // add some space
       children: List.generate(
         day.length,
         (index) {
@@ -15,157 +22,112 @@ class DailyForecast extends StatelessWidget {
           int curHour = int.parse(f.format(new DateTime.now()));
           var hour = day[index]["hour"][curHour];
 
-          //print(formatter.format(now));
-          //return SizedBox.shrink();
           return GestureDetector(
             onTap: () {
               store.selectedDayIndex = index;
-              store.selectedDayIndex = index;
+
+              store.pageViewController.animateToPage(
+                2,
+                curve: Curves.easeIn,
+                duration: Duration(milliseconds: 300),
+              );
             },
             child: Card(
               elevation: 5,
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    colors: [
-                      Colors.black,
-                      Colors.grey,
-                    ],
-                    stops: [0.1, 0.8],
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      hour["time"]
-                          .toString()
-                          .substring(0, hour["time"].toString().indexOf(' ')),
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.network(
-                          hour["condition"]["icon"].replaceAll("//", "http://"),
-                        ),
-                        Column(
-                          children: [
-                            Text(hour["temp_c"].toString() + " C"),
-                            Text(hour["temp_f"].toString() + " F"),
-                          ],
-                        )
-                      ],
-                    ),
-                    Text(
-                      hour["condition"]["text"].toString(),
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    Card(
-                      elevation: 8,
-                      child: Container(
-                        color: Colors.black.withOpacity(0.4),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Wind"),
-                                Text(
-                                  hour["wind_kph"].toString() + " kph",
-                                  style: TextStyle(
-                                    color: Colors.blue[200],
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Feels Like "),
-                                Text(
-                                  hour["feelslike_c"].toString() + " C",
-                                  style: TextStyle(
-                                    color: Colors.blue[200],
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Chance Of Rain"),
-                                Text(
-                                  hour["chance_of_rain"].toString() + " %",
-                                  style: TextStyle(
-                                    color: Colors.blue[200],
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Chance Of Snow "),
-                                Text(
-                                  hour["chance_of_snow"].toString() + " %",
-                                  style: TextStyle(
-                                    color: Colors.blue[200],
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+              child: Stack(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        colors: [
+                          Colors.black,
+                          Colors.grey,
+                        ],
+                        stops: [0.1, 0.8],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        hour["time"]
+                            .toString()
+                            .substring(0, hour["time"].toString().indexOf(' ')),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.network(
+                            hour["condition"]["icon"]
+                                .replaceAll("//", "http://"),
+                          ),
+                          Column(
+                            children: [
+                              Text(hour["temp_c"].toString() + " C"),
+                              Text(hour["temp_f"].toString() + " F"),
+                            ],
+                          )
+                        ],
+                      ),
+                      Text(
+                        hour["condition"]["text"].toString(),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      Card(
+                        elevation: 8,
+                        child: Container(
+                          color: Colors.black.withOpacity(0.4),
+                          child: Column(
+                            children: [
+                              _detailText(
+                                "Wind",
+                                hour["wind_kph"].toString() + " kph",
+                              ),
+                              _detailText(
+                                "Feels Like",
+                                hour["feelslike_c"].toString() + " C",
+                              ),
+                              _detailText(
+                                "Chance Of Rain",
+                                hour["chance_of_rain"].toString() + " %",
+                              ),
+                              _detailText(
+                                "Chance Of Snow",
+                                hour["chance_of_snow"].toString() + " %",
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           );
         },
       ),
     );
-    /*return Container(
-      child: ListView.builder(
-        primary: false,
-        shrinkWrap: true,
-        padding: EdgeInsets.all(8),
-        itemCount: hour.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Card(
-            elevation: 5,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Row(
-                  children: [
-                    Text(index.toString()),
-                    Image.network(
-                      hour[index]["condition"]["icon"]
-                          .replaceAll("//", "http://"),
-                    ),
-                    Text(hour[index]["condition"]["text"].toString()),
-                  ],
-                ),
-                Text("temp_c"),
-                Text(hour[index]["temp_c"].toString() + " C"),
-              ],
-            ),
-          );
-        },
-      ),
-    );*/
+  }
+
+  _detailText(String label, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label),
+        Text(
+          value,
+          style: TextStyle(
+            color: Colors.blue[200],
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
   }
 }

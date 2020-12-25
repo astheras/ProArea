@@ -18,9 +18,10 @@ Future<Map> fetchGet(String url) async {
     };
   }
 
+  String decoded = utf8.decode(response.bodyBytes);
   Map result = {
     "result": true,
-    "data": json.decode(response.body),
+    "data": json.decode(decoded),
   };
 
   return result;
@@ -28,6 +29,6 @@ Future<Map> fetchGet(String url) async {
 
 Future<Map> getWeatherByCityName(String cityName) async {
   return await fetchGet(
-    'http://api.weatherapi.com/v1/forecast.json?key=701c9041891b4773ab6105328202212&q=$cityName&days=8',
+    'http://api.weatherapi.com/v1/forecast.json?key=701c9041891b4773ab6105328202212&q=$cityName&days=10',
   );
 }

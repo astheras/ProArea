@@ -27,139 +27,21 @@ class InterestingInfo extends StatelessWidget {
             children: [
               ListView(
                 children: [
-                  Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        Text("Max temperature"),
-                        Text(
-                          day["maxtemp_c"].toString() + " C",
-                          style: TextStyle(
-                            color: Colors.blue[200],
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        Text("Min temperature"),
-                        Text(
-                          day["mintemp_c"].toString() + " C",
-                          style: TextStyle(
-                            color: Colors.blue[200],
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        Text("Max wind"),
-                        Text(
-                          day["maxwind_kph"].toString() + " kph",
-                          style: TextStyle(
-                            color: Colors.blue[200],
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        Text("Chance of snow"),
-                        Text(
-                          day["daily_chance_of_snow"].toString() + " %",
-                          style: TextStyle(
-                            color: Colors.blue[200],
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  _card("Max Temperature", day["maxtemp_c"].toString() + " C"),
+                  _card("Min Temperature", day["mintemp_c"].toString() + " C"),
+                  _card("Max Wind", day["maxwind_kph"].toString() + " kph"),
+                  _card("Chance Of Snow",
+                      day["daily_chance_of_snow"].toString() + " %"),
                 ],
               ),
               // second part of GridView
               ListView(
                 children: [
-                  Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        Text("Max temperature"),
-                        Text(
-                          day["maxtemp_f"].toString() + " F",
-                          style: TextStyle(
-                            color: Colors.blue[200],
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        Text("Min temperature"),
-                        Text(
-                          day["mintemp_f"].toString() + " F",
-                          style: TextStyle(
-                            color: Colors.blue[200],
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        Text("Avg humidity"),
-                        Text(
-                          day["avghumidity"].toString() + " %",
-                          style: TextStyle(
-                            color: Colors.blue[200],
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        Text("Chance of rain"),
-                        Text(
-                          day["daily_chance_of_rain"].toString() + " %",
-                          style: TextStyle(
-                            color: Colors.blue[200],
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  _card("Max Temperature", day["maxtemp_f"].toString() + " F"),
+                  _card("Min Temperature", day["mintemp_f"].toString() + " F"),
+                  _card("Avg humidity", day["avghumidity"].toString() + " %"),
+                  _card("Chance of rain",
+                      day["daily_chance_of_rain"].toString() + " %"),
                 ],
               )
             ],
@@ -181,112 +63,54 @@ class InterestingInfo extends StatelessWidget {
             children: [
               ListView(
                 children: [
-                  Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        Text("Sunrise"),
-                        Text(
-                          astro["sunrise"].toString(),
-                          style: TextStyle(
-                            color: Colors.blue[200],
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        Text("Moonrise"),
-                        Text(
-                          astro["moonrise"].toString(),
-                          style: TextStyle(
-                            color: Colors.blue[200],
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        Text("Moon Phase"),
-                        Text(
-                          astro["moon_phase"].toString(),
-                          style: TextStyle(
-                            color: Colors.blue[200],
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  _card("Sunrise", astro["sunrise"].toString()),
+                  _card("Moonrise", astro["moonrise"].toString()),
+                  _card("Moon Phase", astro["moon_phase"].toString()),
                 ],
               ),
               // second part of GridView
               ListView(
                 children: [
-                  Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        Text("Sunset"),
-                        Text(
-                          astro["sunset"].toString(),
-                          style: TextStyle(
-                            color: Colors.blue[200],
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        Text("Moonset"),
-                        Text(
-                          astro["moonset"].toString(),
-                          style: TextStyle(
-                            color: Colors.blue[200],
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Card(
-                    elevation: 5,
-                    child: Column(
-                      children: [
-                        Text("Moon Illumination"),
-                        Text(
-                          astro["moon_illumination"].toString(),
-                          style: TextStyle(
-                            color: Colors.blue[200],
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  _card("Sunset", astro["sunset"].toString()),
+                  _card("Moonset", astro["moonset"].toString()),
+                  _card("Moon Illumination",
+                      astro["moon_illumination"].toString()),
                 ],
               )
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  _card(String label, String text) {
+    return Card(
+      elevation: 5,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.bottomCenter,
+            colors: [
+              Colors.black,
+              Colors.grey,
+            ],
+            stops: [0.1, 0.7],
+          ),
+        ),
+        child: Column(
+          children: [
+            Text(label),
+            Text(
+              text,
+              style: TextStyle(
+                color: Colors.blue[200],
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
